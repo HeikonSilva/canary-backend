@@ -14,9 +14,15 @@ importers:
       '@prisma/client':
         specifier: 6.8.2
         version: 6.8.2(prisma@6.8.2(typescript@5.8.3))(typescript@5.8.3)
+      bcryptjs:
+        specifier: ^3.0.2
+        version: 3.0.2
       fastify:
         specifier: ^5.3.3
         version: 5.3.3
+      zod:
+        specifier: ^3.25.33
+        version: 3.25.33
     devDependencies:
       prisma:
         specifier: ^6.8.2
@@ -252,6 +258,10 @@ packages:
   avvio@9.1.0:
     resolution: {integrity: sha512-fYASnYi600CsH/j9EQov7lECAniYiBFiiAtBNuZYLA2leLe9qOvZzqYHFjtIj6gD2VMoMLP14834LFWvr4IfDw==}
 
+  bcryptjs@3.0.2:
+    resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
+    hasBin: true
+
   cookie@1.0.2:
     resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
     engines: {node: '>=18'}
@@ -419,6 +429,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  zod@3.25.33:
+    resolution: {integrity: sha512-RnBGYCwJFrLi/hUmeqbYjSIrS/strWjN5PHWgUfyVq96nKycSa4gp4+p6hQGwvcabZs0DWRGzyLhEeQWl+5NhA==}
+
 snapshots:
 
   '@esbuild/aix-ppc64@0.25.5':
@@ -573,6 +586,8 @@ snapshots:
     dependencies:
       '@fastify/error': 4.1.0
       fastq: 1.19.1
+
+  bcryptjs@3.0.2: {}
 
   cookie@1.0.2: {}
 
@@ -759,3 +774,5 @@ snapshots:
       fsevents: 2.3.3
 
   typescript@5.8.3: {}
+
+  zod@3.25.33: {}

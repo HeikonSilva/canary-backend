@@ -15,16 +15,39 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid())
-  username    String   @unique
-  displayName String
-  email       String   @unique
-  passwordHash String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String               @id @default(cuid())
+  name            String               @unique
+  email           String               @unique
+  displayName     String
+  password        String
+  securityAnswers UserSecurityAnswer[]
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
 
   // friends      User[]   @relation("UserFriends", references: [id])
   // friendRequests User[] @relation("UserFriendRequests", references: [id])
   // messages     Message[]
   // conversations Conversation[]
+  // displayName String?
+  // profilePicture String?
+  // bio String?
+}
+
+model SecurityQuestion {
+  id       Int    @id @default(autoincrement())
+  question String @unique
+
+  userAnswers UserSecurityAnswer[]
+}
+
+model UserSecurityAnswer {
+  id         Int    @id @default(autoincrement())
+  userId     String
+  questionId Int
+  answer     String
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question SecurityQuestion @relation(fields: [questionId], references: [id])
+
+  @@unique([userId, questionId])
 }
