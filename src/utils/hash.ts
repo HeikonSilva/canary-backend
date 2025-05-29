@@ -10,3 +10,14 @@ export async function verifyPassword(
 ): Promise<boolean> {
   return compare(password, hash);
 }
+
+export async function hashSecurityAnswer(answer: string): Promise<string> {
+  return hash(answer, 12);
+}
+
+export async function verifySecurityAnswer(
+  answer: string,
+  hash: string
+): Promise<boolean> {
+  return compare(answer, hash);
+}
