@@ -9,10 +9,19 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+// For use Local SQLite DB
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+/**
+ * For use Prisma Postgres Cloud DB
+ * datasource db {
+ * provider = "postgresql"
+ * url      = env("DATABASE_URL")
+ * }
+ */
 
 model User {
   id              String               @id @default(cuid())

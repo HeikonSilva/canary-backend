@@ -13,6 +13,14 @@ export function loginUser(app: FastifyTypedInstance) {
           name: z.string().min(1, "Nome é obrigatório"),
           password: z.string(),
         }),
+        response: {
+          200: z.object({
+            token: z.string(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {
@@ -37,7 +45,7 @@ export function loginUser(app: FastifyTypedInstance) {
       }
 
       const token = app.jwt.sign(
-        { id: user.id },
+        { id: user.id, username: user.name, displayName: user.displayName },
         {
           expiresIn: "1h",
         }

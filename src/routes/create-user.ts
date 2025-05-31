@@ -20,12 +20,35 @@ export async function createUser(app: FastifyTypedInstance) {
                 answer: z.string().min(1, "Resposta obrigatória"),
               })
             )
-            .min(3, "Todas as pergunta de segurança são obrigatória"),
+            .length(3, {
+              message:
+                "Todas as perguntas de segurança são obrigatórias e devem ser exatamente 3",
+            }),
         }),
+        response: {
+          201: z.object({
+            id: z.string(),
+            name: z.string(),
+            displayName: z.string().optional(),
+            createdAt: z.date(),
+            updatedAt: z.date(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {
       const { name, password, displayName, securityAnswers } = request.body;
+
+      const questionIds = securityAnswers.map((a) => a.questionId);
+      const uniqueQuestionIds = new Set(questionIds);
+      if (uniqueQuestionIds.size !== questionIds.length) {
+        return reply.status(400).send({
+          message: "Não é permitido repetir perguntas de segurança.",
+        });
+      }
 
       const existingUser = await prisma.user.findFirst({
         where: { name },
@@ -37,7 +60,6 @@ export async function createUser(app: FastifyTypedInstance) {
         });
       }
 
-      const questionIds = securityAnswers.map((a) => a.questionId);
       const questions = await prisma.securityQuestion.findMany({
         where: { id: { in: questionIds } },
         select: { id: true },
