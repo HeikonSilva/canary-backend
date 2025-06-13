@@ -13,6 +13,12 @@ import {
 import { routes } from './routes'
 import { validateSecurityQuestions } from './scripts/validateSecurityQuestions'
 
+import 'dotenv/config'
+
+const backHost = process.env.BACK_HOST ? process.env.BACK_HOST : 'localhost'
+const backPort = process.env.BACK_PORT
+  ? parseInt(process.env.BACK_PORT, 10)
+  : 3000
 const jwtSecret = process.env.JWT_SECRET
 
 if (!jwtSecret) {
@@ -22,7 +28,9 @@ if (!jwtSecret) {
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.register(fastifyCors, {
-  origin: '*',
+  origin: `http://${process.env.FRONT_HOST || 'localhost'}:${
+    process.env.FRONT_PORT || 5173
+  }`,
 })
 
 app.register(fastifyJwt, {
@@ -56,10 +64,48 @@ app.setSerializerCompiler(serializerCompiler)
 
 app.register(routes)
 
+async function environmentCheck() {
+  if (!process.env.DATABASE_URL) {
+    console.error('ERROR: DATABASE_URL environment variable is not set.')
+    console.error('For testing purposes, default value is: "file:./dev.db".')
+    process.exit(1)
+  }
+  if (!process.env.JWT_SECRET) {
+    console.error('ERROR: JWT_SECRET environment variable is not set.')
+    process.exit(1)
+  }
+  if (!process.env.BACK_HOST) {
+    console.error(
+      'WARNING: BACK_HOST environment variable is not set. Using default "localhost".'
+    )
+  }
+  if (!process.env.BACK_PORT) {
+    console.error(
+      'WARNING: BACK_PORT environment variable is not set. Using default 3000.'
+    )
+  }
+  if (!process.env.FRONT_HOST) {
+    console.error(
+      'WARNING: FRONT_HOST environment variable is not set. Using default "localhost".'
+    )
+  }
+  if (!process.env.FRONT_PORT) {
+    console.error(
+      'WARNING: FRONT_PORT environment variable is not set. Using default 5173.'
+    )
+  }
+}
+
 async function start() {
-  await validateSecurityQuestions(app)
-  await app.listen({ port: 3000 })
-  console.log('Server is running on http://localhost:3000')
+  try {
+    await validateSecurityQuestions(app)
+    await environmentCheck()
+    await app.listen({ port: backPort, host: backHost })
+    console.log(`Server is running on http://${backHost}:${backPort}`)
+  } catch (error) {
+    console.error('Error during server startup:', error)
+    process.exit(1)
+  }
 }
 
 start()

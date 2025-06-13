@@ -16,16 +16,17 @@
     "@fastify/jwt": "^9.1.0",
     "@fastify/swagger": "^9.5.1",
     "@fastify/swagger-ui": "^5.2.2",
-    "@prisma/client": "6.8.2",
+    "@prisma/client": "6.9.0",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "fastify": "^5.3.3",
     "fastify-type-provider-zod": "^4.0.2",
+    "glob": "^11.0.2",
     "zod": "^3.25.33"
   },
   "devDependencies": {
     "@types/node": "^22.15.24",
-    "prisma": "^6.8.2",
+    "prisma": "^6.9.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
